@@ -6,13 +6,13 @@
 
 @php
 $classStyle = [
-    'Dark'   => ['badge' => 'bg-gray-900 text-white',        'bar' => 'bg-gray-800',   'accent' => 'border-gray-300',  'soft' => 'bg-gray-50'],
-    'Green'  => ['badge' => 'bg-green-100 text-green-800',   'bar' => 'bg-green-400',  'accent' => 'border-green-200', 'soft' => 'bg-green-50'],
-    'Light'  => ['badge' => 'bg-yellow-100 text-yellow-800', 'bar' => 'bg-yellow-300', 'accent' => 'border-yellow-200','soft' => 'bg-yellow-50'],
-    'Medium' => ['badge' => 'bg-orange-100 text-orange-800', 'bar' => 'bg-orange-400', 'accent' => 'border-orange-200','soft' => 'bg-orange-50'],
+'Dark' => ['badge' => 'bg-gray-900 text-white', 'bar' => 'bg-gray-800', 'accent' => 'border-gray-300', 'soft' => 'bg-gray-50'],
+'Green' => ['badge' => 'bg-green-100 text-green-800', 'bar' => 'bg-green-400', 'accent' => 'border-green-200', 'soft' => 'bg-green-50'],
+'Light' => ['badge' => 'bg-yellow-100 text-yellow-800', 'bar' => 'bg-yellow-300', 'accent' => 'border-yellow-200','soft' => 'bg-yellow-50'],
+'Medium' => ['badge' => 'bg-orange-100 text-orange-800', 'bar' => 'bg-orange-400', 'accent' => 'border-orange-200','soft' => 'bg-orange-50'],
 ];
-$cls     = $coffee->final_classification ?? 'Dark';
-$style   = $classStyle[$cls] ?? $classStyle['Dark'];
+$cls = $coffee->final_classification ?? 'Dark';
+$style = $classStyle[$cls] ?? $classStyle['Dark'];
 
 // Round time helper: ms → "Xs" if ≥ 1000, else "Xms"
 $fmtTime = fn($ms) => $ms >= 1000 ? round($ms / 1000) . 's' : round($ms) . 'ms';
@@ -24,9 +24,10 @@ $fmtTime = fn($ms) => $ms >= 1000 ? round($ms / 1000) . 's' : round($ms) . 'ms';
     <div class="sticky top-0 z-20 bg-white border-b border-gray-200">
         <div class="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
             <a href="{{ route('coffee.create') }}"
-               class="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-gray-900 transition-colors">
+                class="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-gray-900 transition-colors">
                 <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+                    <line x1="19" y1="12" x2="5" y2="12" />
+                    <polyline points="12 19 5 12 12 5" />
                 </svg>
                 Kembali ke Halaman Klasifikasi
             </a>
@@ -37,11 +38,16 @@ $fmtTime = fn($ms) => $ms >= 1000 ? round($ms / 1000) . 's' : round($ms) . 'ms';
                     Edit
                 </a> -->
                 <form action="{{ route('coffee.destroy', $coffee) }}" method="POST"
-                      onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                    onsubmit="return confirm('Yakin ingin menghapus data ini?')">
                     @csrf @method('DELETE')
                     <button type="submit"
-                            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-red-200 text-xs font-semibold text-red-500 hover:bg-red-50 transition-colors">
-                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-red-200 text-xs font-semibold text-red-500 hover:bg-red-50 transition-colors">
+                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="3 6 5 6 21 6" />
+                            <path d="M19 6l-1 14H6L5 6" />
+                            <path d="M10 11v6M14 11v6" />
+                            <path d="M9 6V4h6v2" />
+                        </svg>
                         Hapus
                     </button>
                 </form>
@@ -54,7 +60,9 @@ $fmtTime = fn($ms) => $ms >= 1000 ? round($ms / 1000) . 's' : round($ms) . 'ms';
         {{-- Flash --}}
         @if(session('success'))
         <div class="mb-8 flex items-center gap-3 px-4 py-3 bg-green-50 border border-green-200 text-green-700 rounded-xl text-sm">
-            <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12" />
+            </svg>
             {{ session('success') }}
         </div>
         @endif
@@ -94,20 +102,20 @@ $fmtTime = fn($ms) => $ms >= 1000 ? round($ms / 1000) . 's' : round($ms) . 'ms';
                 {{-- Image --}}
                 <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
                     @if($coffee->image_path)
-                        <div class="aspect-square overflow-hidden bg-gray-100">
-                            <img src="{{ asset('storage/'.$coffee->image_path) }}"
-                                 alt="{{ $coffee->name }}"
-                                 class="w-full h-full object-cover">
-                        </div>
+                    <div class="aspect-square overflow-hidden bg-gray-100">
+                        <img src="{{ asset('storage/'.$coffee->image_path) }}"
+                            alt="{{ $coffee->name }}"
+                            class="w-full h-full object-cover">
+                    </div>
                     @else
-                        <div class="aspect-square bg-gray-100 flex flex-col items-center justify-center gap-2 text-gray-300">
-                            <svg class="w-14 h-14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
-                                <rect x="3" y="3" width="18" height="18" rx="2"/>
-                                <circle cx="8.5" cy="8.5" r="1.5"/>
-                                <polyline points="21 15 16 10 5 21"/>
-                            </svg>
-                            <span class="text-xs font-medium">No Image</span>
-                        </div>
+                    <div class="aspect-square bg-gray-100 flex flex-col items-center justify-center gap-2 text-gray-300">
+                        <svg class="w-14 h-14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                            <rect x="3" y="3" width="18" height="18" rx="2" />
+                            <circle cx="8.5" cy="8.5" r="1.5" />
+                            <polyline points="21 15 16 10 5 21" />
+                        </svg>
+                        <span class="text-xs font-medium">No Image</span>
+                    </div>
                     @endif
 
                     {{-- Meta below image --}}
@@ -144,8 +152,8 @@ $fmtTime = fn($ms) => $ms >= 1000 ? round($ms / 1000) . 's' : round($ms) . 'ms';
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2">
                                 <svg class="w-4 h-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <rect x="2" y="7" width="20" height="14" rx="2"/>
-                                    <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/>
+                                    <rect x="2" y="7" width="20" height="14" rx="2" />
+                                    <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" />
                                 </svg>
                                 <span class="text-sm text-gray-600">Batch Size</span>
                             </div>
@@ -158,18 +166,18 @@ $fmtTime = fn($ms) => $ms >= 1000 ? round($ms / 1000) . 's' : round($ms) . 'ms';
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2">
                                 <svg class="w-4 h-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/>
+                                    <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83" />
                                 </svg>
                                 <span class="text-sm text-gray-600">TTA (Test Time Aug.)</span>
                             </div>
                             @if($coffee->use_tta ?? true)
-                                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
-                                    ✓ Aktif
-                                </span>
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
+                                ✓ Aktif
+                            </span>
                             @else
-                                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-600">
-                                    Nonaktif
-                                </span>
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-600">
+                                Nonaktif
+                            </span>
                             @endif
                         </div>
 
@@ -178,12 +186,12 @@ $fmtTime = fn($ms) => $ms >= 1000 ? round($ms / 1000) . 's' : round($ms) . 'ms';
                         <div class="flex items-center justify-between pt-2 border-t border-gray-100">
                             <div class="flex items-center gap-2">
                                 <svg class="w-4 h-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4m14-7l-5-5-5 5m5-5v12"/>
+                                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4m14-7l-5-5-5 5m5-5v12" />
                                 </svg>
                                 <span class="text-sm text-gray-600">Upload Mode</span>
                             </div>
                             @php
-                                $modeBadge = $coffee->getUploadModeBadge();
+                            $modeBadge = $coffee->getUploadModeBadge();
                             @endphp
                             <span class="px-3 py-1 rounded-full text-xs font-semibold {{ $modeBadge['color'] }}">
                                 {{ $modeBadge['text'] }}
@@ -199,9 +207,9 @@ $fmtTime = fn($ms) => $ms >= 1000 ? round($ms / 1000) . 's' : round($ms) . 'ms';
                     <form action="{{ route('coffee.reclassify', $coffee) }}" method="POST">
                         @csrf
                         <button type="submit"
-                                class="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-700 transition-colors">
+                            class="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-700 transition-colors">
                             <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+                                <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
                             </svg>
                             Klasifikasi Ulang
                         </button>
@@ -219,9 +227,13 @@ $fmtTime = fn($ms) => $ms >= 1000 ? round($ms / 1000) . 's' : round($ms) . 'ms';
                         <div class="flex items-center gap-2.5">
                             <div class="w-8 h-8 rounded-full flex items-center justify-center {{ $coffee->models_agree ? 'bg-green-100' : 'bg-amber-100' }}">
                                 @if($coffee->models_agree)
-                                    <svg class="w-4 h-4 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                <svg class="w-4 h-4 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
                                 @else
-                                    <svg class="w-4 h-4 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+                                <svg class="w-4 h-4 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+                                </svg>
                                 @endif
                             </div>
                             <div>
@@ -257,7 +269,10 @@ $fmtTime = fn($ms) => $ms >= 1000 ? round($ms / 1000) . 's' : round($ms) . 'ms';
                             </div>
                             @if($coffee->processing_time_small)
                             <span class="flex items-center gap-1 px-2.5 py-1 bg-gray-100 rounded-lg text-xs font-bold text-gray-600">
-                                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <polyline points="12 6 12 12 16 14" />
+                                </svg>
                                 {{ $fmtTime($coffee->processing_time_small) }}
                             </span>
                             @endif
@@ -293,7 +308,7 @@ $fmtTime = fn($ms) => $ms >= 1000 ? round($ms / 1000) . 's' : round($ms) . 'ms';
                                 <div class="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
                                     <div class="h-full rounded-full transition-all
                                                 {{ ($classStyle[$pred['class']]['bar'] ?? 'bg-gray-400') }}"
-                                         style="width:{{ $pred['confidence'] }}%"></div>
+                                        style="width:{{ $pred['confidence'] }}%"></div>
                                 </div>
                                 <span class="text-[10px] font-bold text-gray-600 w-10 text-right">{{ number_format($pred['confidence'], 1) }}%</span>
                             </div>
@@ -313,7 +328,10 @@ $fmtTime = fn($ms) => $ms >= 1000 ? round($ms / 1000) . 's' : round($ms) . 'ms';
                             </div>
                             @if($coffee->processing_time_large)
                             <span class="flex items-center gap-1 px-2.5 py-1 bg-gray-100 rounded-lg text-xs font-bold text-gray-600">
-                                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <polyline points="12 6 12 12 16 14" />
+                                </svg>
                                 {{ $fmtTime($coffee->processing_time_large) }}
                             </span>
                             @endif
@@ -346,7 +364,7 @@ $fmtTime = fn($ms) => $ms >= 1000 ? round($ms / 1000) . 's' : round($ms) . 'ms';
                                 <div class="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
                                     <div class="h-full rounded-full transition-all
                                                 {{ ($classStyle[$pred['class']]['bar'] ?? 'bg-gray-400') }}"
-                                         style="width:{{ $pred['confidence'] }}%"></div>
+                                        style="width:{{ $pred['confidence'] }}%"></div>
                                 </div>
                                 <span class="text-[10px] font-bold text-gray-600 w-10 text-right">{{ number_format($pred['confidence'], 1) }}%</span>
                             </div>
@@ -362,32 +380,46 @@ $fmtTime = fn($ms) => $ms >= 1000 ? round($ms / 1000) . 's' : round($ms) . 'ms';
                 <div class="bg-white rounded-2xl border border-gray-200 p-6">
                     <p class="text-[10px] uppercase tracking-widest text-gray-400 font-semibold mb-5">Analisis Perbandingan</p>
                     <div class="grid grid-cols-2 gap-4">
+
+                        {{-- Model Tercepat --}}
                         @if(isset($coffee->comparison_analysis['faster_model']))
                         <div class="bg-gray-50 rounded-xl p-4 border border-gray-100">
                             <p class="text-[10px] uppercase tracking-wide text-gray-400 font-semibold mb-1">Model Tercepat</p>
                             <p class="text-xl font-bold text-gray-900">
-                                {{ $coffee->comparison_analysis['faster_model'] === 'small' ? 'MobileNetV2 (Tuned)' : 'MobileNetV3 Large' }}
+                                {{-- 💡 Langsung cetak string aslinya atau sesuaikan jika masih melempar format lama --}}
+                                @if(in_array($coffee->comparison_analysis['faster_model'], ['small', 'MobileNetV2']))
+                                MobileNetV2 Modified
+                                @else
+                                MobileNetV3 Large
+                                @endif
                             </p>
                             @if(isset($coffee->comparison_analysis['speed_improvement_percent']))
                             <p class="text-[10px] text-gray-400 mt-1">{{ number_format($coffee->comparison_analysis['speed_improvement_percent'], 0) }}% lebih cepat</p>
                             @endif
                         </div>
                         @endif
+
+                        {{-- Model Paling Yakin --}}
                         @if(isset($coffee->comparison_analysis['more_confident_model']))
                         <div class="bg-gray-50 rounded-xl p-4 border border-gray-100">
                             <p class="text-[10px] uppercase tracking-wide text-gray-400 font-semibold mb-1">Model Paling Yakin</p>
                             <p class="text-xl font-bold text-gray-900">
-                                {{ $coffee->comparison_analysis['more_confident_model'] === 'small' ? 'MobileNetV2 (Tuned)' : 'MobileNetV3 Large' }}
+                                {{-- 💡 Perbaikan logika pengecekan dua versi agar aman dari string lama/baru --}}
+                                @if(in_array($coffee->comparison_analysis['more_confident_model'], ['small', 'MobileNetV2']))
+                                MobileNetV2 Modified
+                                @else
+                                MobileNetV3 Large
+                                @endif
                             </p>
                             @if(isset($coffee->comparison_analysis['confidence_improvement']))
                             <p class="text-[10px] text-gray-400 mt-1">+{{ number_format($coffee->comparison_analysis['confidence_improvement'], 1) }}% confidence</p>
                             @endif
                         </div>
                         @endif
+
                     </div>
                 </div>
                 @endif
-
             </div>
         </div>
     </div>

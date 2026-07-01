@@ -18,7 +18,9 @@ class FlaskApiService
 
     public function __construct()
     {
-        $this->baseUrl       = config('services.flask.url', 'http://localhost:5000');
+        // $this->baseUrl = env('FLASK_API_URL', 'https://michaelwn-klasifikasi-roasting-kopi.hf.space');
+        // $this->baseUrl       = config('services.flask.url', 'http://localhost:5000');
+        $this->baseUrl       = config('services.flask.url');
         $this->timeout       = config('services.flask.timeout', 60);
         $this->batchTimeout  = config('services.flask.batch_timeout', 300);
         $this->folderTimeout = config('services.flask.folder_timeout', 600);
@@ -64,11 +66,19 @@ class FlaskApiService
             $bs  = $this->sanitizeBatchSize($batchSize);
             $tta = $this->sanitizeUseTta($useTta);
 
-            $response = Http::timeout($this->timeout)
+            // $response = Http::timeout($this->timeout)
+            //     ->attach('image', file_get_contents($imagePath), basename($imagePath))
+            //     ->post("{$this->baseUrl}/api/classify-dual", [
+            //         'batch_size' => $bs,
+            //         'use_tta'    => $tta,
+            //     ]);
+
+            $response = Http::withoutVerifying()
+                ->timeout($this->timeout)
                 ->attach('image', file_get_contents($imagePath), basename($imagePath))
                 ->post("{$this->baseUrl}/api/classify-dual", [
                     'batch_size' => $bs,
-                    'use_tta'    => $tta,
+                    'use_tta' => $tta,
                 ]);
 
             if ($response->successful()) {
@@ -88,7 +98,6 @@ class FlaskApiService
             }
 
             return ['success' => false, 'error' => $response->json()['error'] ?? 'Unknown error'];
-
         } catch (\Exception $e) {
             Log::error('Flask classifyImage Error: ' . $e->getMessage());
             return ['success' => false, 'error' => $e->getMessage()];
@@ -117,11 +126,19 @@ class FlaskApiService
             $bs  = $this->sanitizeBatchSize($batchSize);
             $tta = $this->sanitizeUseTta($useTta);
 
-            $response = Http::timeout($this->timeout)
+            // $response = Http::timeout($this->timeout)
+            //     ->attach('image', file_get_contents($imagePath), basename($imagePath))
+            //     ->post("{$this->baseUrl}/api/classify/{$modelType}", [
+            //         'batch_size' => $bs,
+            //         'use_tta'    => $tta,
+            //     ]);
+
+            $response = Http::withoutVerifying()
+                ->timeout($this->timeout)
                 ->attach('image', file_get_contents($imagePath), basename($imagePath))
-                ->post("{$this->baseUrl}/api/classify/{$modelType}", [
+                ->post("{$this->baseUrl}/api/classify-dual", [
                     'batch_size' => $bs,
-                    'use_tta'    => $tta,
+                    'use_tta' => $tta,
                 ]);
 
             if ($response->successful()) {
@@ -139,7 +156,6 @@ class FlaskApiService
             }
 
             return ['success' => false, 'error' => $response->json()['error'] ?? 'Unknown error'];
-
         } catch (\Exception $e) {
             Log::error('Flask classifyWithModel Error: ' . $e->getMessage());
             return ['success' => false, 'error' => $e->getMessage()];
@@ -184,16 +200,23 @@ class FlaskApiService
             $multipart[] = ['name' => 'batch_size',  'contents' => (string) $bs];
             $multipart[] = ['name' => 'use_tta',     'contents' => $tta];
 
-            $response = Http::timeout($this->batchTimeout)
-                ->asMultipart()
-                ->post("{$this->baseUrl}/api/classify-batch", $multipart);
+            // $response = Http::timeout($this->batchTimeout)
+            //     ->asMultipart()
+            //     ->post("{$this->baseUrl}/api/classify-batch", $multipart);
+
+            $response = Http::withoutVerifying()
+                ->timeout($this->timeout)
+                ->attach('image', file_get_contents($imagePath), basename($imagePath))
+                ->post("{$this->baseUrl}/api/classify-dual", [
+                    'batch_size' => $bs,
+                    'use_tta' => $tta,
+                ]);
 
             if ($response->successful()) {
                 return ['success' => true, 'data' => $response->json()];
             }
 
             return ['success' => false, 'error' => $response->json()['error'] ?? 'Unknown error'];
-
         } catch (\Exception $e) {
             Log::error('Flask classifyBatch Error: ' . $e->getMessage());
             return ['success' => false, 'error' => $e->getMessage()];
@@ -221,12 +244,20 @@ class FlaskApiService
 
             Log::info("Sending ZIP to Flask: {$fileName} (" . round($fileSize / 1024 / 1024, 2) . " MB) | BS={$bs} | TTA={$tta}");
 
-            $response = Http::timeout($this->folderTimeout)
-                ->attach('folder', file_get_contents($zipPath), $fileName)
-                ->post("{$this->baseUrl}/api/classify-folder", [
-                    'model_type' => 'both',
+            // $response = Http::timeout($this->folderTimeout)
+            //     ->attach('folder', file_get_contents($zipPath), $fileName)
+            //     ->post("{$this->baseUrl}/api/classify-folder", [
+            //         'model_type' => 'both',
+            //         'batch_size' => $bs,
+            //         'use_tta'    => $tta,
+            //     ]);
+
+            $response = Http::withoutVerifying()
+                ->timeout($this->timeout)
+                ->attach('image', file_get_contents($imagePath), basename($imagePath))
+                ->post("{$this->baseUrl}/api/classify-dual", [
                     'batch_size' => $bs,
-                    'use_tta'    => $tta,
+                    'use_tta' => $tta,
                 ]);
 
             if ($response->successful()) {
@@ -237,7 +268,6 @@ class FlaskApiService
                 'success' => false,
                 'error'   => $response->json()['error'] ?? "HTTP {$response->status()}"
             ];
-
         } catch (\Illuminate\Http\Client\ConnectionException $e) {
             Log::error('Flask Folder Timeout: ' . $e->getMessage());
             return [
@@ -267,14 +297,21 @@ class FlaskApiService
     public function getModelInfo(): array
     {
         try {
-            $response = Http::timeout(10)->get("{$this->baseUrl}/api/model-info");
+            // $response = Http::timeout(10)->get("{$this->baseUrl}/api/model-info");
+
+            $response = Http::withoutVerifying()
+                ->timeout($this->timeout)
+                ->attach('image', file_get_contents($imagePath), basename($imagePath))
+                ->post("{$this->baseUrl}/api/classify-dual", [
+                    'batch_size' => $bs,
+                    'use_tta' => $tta,
+                ]);
 
             if ($response->successful()) {
                 return ['success' => true, 'data' => $response->json()];
             }
 
             return ['success' => false, 'error' => 'Failed to get model info'];
-
         } catch (\Exception $e) {
             return ['success' => false, 'error' => $e->getMessage()];
         }
