@@ -2,6 +2,9 @@
 
 Sistem informasi untuk manajemen dan klasifikasi tingkat roasting biji kopi menggunakan Laravel dan Flask AI.
 
+## Sumber
+https://github.com/MalikiDev/klasifikasi-beans
+
 ## Kelas Klasifikasi
 
 Sistem mengklasifikasikan biji kopi berdasarkan tingkat roasting:
